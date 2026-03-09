@@ -227,12 +227,37 @@
                 return;
             }
 
-            // 在此處可加入將訂單資料傳送至後端伺服器的邏輯
-            alert("訂單已成功送出！感謝您的購買。");
+            // 組合訂單內容文字
+            let orderText = "您好，這是我的訂單明細：\n\n";
+            let sum = 0;
+            cart.forEach(item => {
+                const subtotal = item.price * item.qty;
+                sum += subtotal;
+                orderText += `商品編號: ${item.id}\n`;
+                orderText += `商品名稱: ${item.name}\n`;
+                orderText += `單價: $${item.price}\n`;
+                orderText += `數量: ${item.qty}\n`;
+                orderText += `小計: $${subtotal}\n`;
+                orderText += `------------------------\n`;
+            });
+            orderText += `總金額: $${sum}\n\n`;
+            orderText += `請盡快與我聯絡，謝謝！`;
 
-            // 清空購物車資料並返回首頁
+            // 將主旨與內容進行 URL 編碼
+            const subject = encodeURIComponent("木刻時光 Laser Studio - 新訂單");
+            const body = encodeURIComponent(orderText);
+            const mailtoLink = `mailto:ih2562@msn.com?subject=${subject}&body=${body}`;
+
+            // 啟動系統預設的 email 軟體
+            window.location.href = mailtoLink;
+
+            alert("訂單已準備使用 Email 寄出！感謝您的購買。");
+
+            // 清空購物車資料並使用 setTimeout 返回首頁，以免被 mailto 覆蓋原本的頁面跳轉
             localStorage.removeItem("cart");
-            window.location.href = "index.html";
+            setTimeout(() => {
+                window.location.href = "index.html";
+            }, 500);
         }
 
         // 載入時渲染訂單
