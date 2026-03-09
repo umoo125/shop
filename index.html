@@ -255,7 +255,10 @@
 
     <hr>
     <h4>總金額: $<span id="total">0</span></h4>
-    <button onclick="clearCart()">清空購物車</button>
+    <button onclick="clearCart()"
+      style="width:100%;padding:10px;border:none;background:#d8c3a5;border-radius:8px;cursor:pointer;margin-bottom:10px;">清空購物車</button>
+    <button onclick="addToOrder()"
+      style="width:100%;padding:10px;border:none;background:#b85c38;color:white;border-radius:8px;cursor:pointer;font-weight:bold;">加入訂單</button>
   </div>
   <div class="bottom-nav">
     <div onclick="openMenu()">分類</div>
@@ -385,6 +388,15 @@
       updateCart();
     }
 
+    function addToOrder() {
+      if (cart.length === 0) {
+        alert("購物車內還沒有商品喔！");
+        return;
+      }
+      // 跳轉至訂單頁面
+      window.location.href = "order.html";
+    }
+
     function generateCategories() {
       const container = document.getElementById("categoryButtons");
       container.innerHTML = "";
@@ -487,6 +499,9 @@
     }
 
     function showDetail(id) {
+      // 記錄目前捲動位置
+      sessionStorage.setItem("scrollPosition", window.scrollY);
+
       const product = products.find(p => p.id === id);
       if (!product) return;
 
@@ -514,7 +529,7 @@
           $${product.price}
         </p>
 
-        <button onclick="addToCart(${product.id},this,event)"
+        <button onclick="addToCart(${product.id},this,event);event.stopPropagation();"
           style="width:100%;padding:12px;border:none;
           background:#b85c38;color:white;border-radius:8px;
           margin-top:10px;">
@@ -527,7 +542,12 @@
     function closeDetail() {
       document.getElementById("productDetail").style.display = "none";
       document.getElementById("productList").style.display = "grid";
-      window.scrollTo(0, 0);
+      // 恢復捲動位置
+      const scrollPos = sessionStorage.getItem("scrollPosition");
+      if (scrollPos) {
+        window.scrollTo(0, parseInt(scrollPos));
+        sessionStorage.removeItem("scrollPosition");
+      }
     }
 
     async function init() {

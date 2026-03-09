@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>訂單明細 - 木刻時光 Laser Studio</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Noto Sans TC", sans-serif;
+            background: #f6f2eb;
+            color: #4a4036;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            text-align: center;
+            color: #b85c38;
+            margin-top: 0;
+            border-bottom: 2px solid #efe6db;
+            padding-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #efe6db;
+        }
+
+        th {
+            background: #f9f7f2;
+            color: #8c7b6c;
+            font-weight: bold;
+        }
+
+        .product-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .total-row {
+            font-size: 18px;
+            font-weight: bold;
+            color: #b85c38;
+            text-align: right;
+        }
+
+        .btn-group {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.2s;
+        }
+
+        .btn-back {
+            background: #d8c3a5;
+            color: #4a4036;
+        }
+
+        .btn-back:hover {
+            background: #cbb493;
+        }
+
+        .btn-confirm {
+            background: #b85c38;
+            color: white;
+            font-weight: bold;
+        }
+
+        .btn-confirm:hover {
+            background: #a34e2e;
+        }
+
+        @media (max-width: 600px) {
+
+            table,
+            thead,
+            tbody,
+            th,
+            td,
+            tr {
+                display: block;
+            }
+
+            thead tr {
+                display: none;
+            }
+
+            tr {
+                margin-bottom: 15px;
+                border: 1px solid #efe6db;
+                border-radius: 8px;
+                padding: 10px;
+            }
+
+            td {
+                border: none;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 8px 0;
+            }
+
+            td::before {
+                content: attr(data-label);
+                font-weight: bold;
+                color: #8c7b6c;
+            }
+
+            .product-img {
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>您的訂單明細</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>商品圖片</th>
+                    <th>商品編號 (ID)</th>
+                    <th>商品名稱</th>
+                    <th>單價</th>
+                    <th>數量</th>
+                    <th>小計</th>
+                </tr>
+            </thead>
+            <tbody id="orderItems">
+                <!-- 訂單內容會由 JavaScript 動態產生 -->
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6" class="total-row">
+                        總金額：$<span id="orderTotal">0</span>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="btn-group">
+            <button class="btn-back" onclick="goBack()">返回繼續購物</button>
+            <button class="btn-confirm" onclick="confirmOrder()">確認送出訂單</button>
+        </div>
+    </div>
+
+    <script>
+        function renderOrder() {
+            const orderItems = document.getElementById("orderItems");
+            const orderTotal = document.getElementById("orderTotal");
+
+            // 從 localStorage 取得購物車資料
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+            if (cart.length === 0) {
+                orderItems.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 30px;">您的訂單中沒有商品</td</tr>`;
+                orderTotal.innerText = "0";
+                return;
+            }
+
+            let sum = 0;
+            orderItems.innerHTML = "";
+
+            cart.forEach(item => {
+                const subtotal = item.price * item.qty;
+                sum += subtotal;
+
+                orderItems.innerHTML += `
+          <tr>
+            <td data-label="圖片"><img src="${item.image || 'https://via.placeholder.com/60'}" class="product-img" alt="${item.name}"></td>
+            <td data-label="ID">${item.id}</td>
+            <td data-label="名稱">${item.name}</td>
+            <td data-label="單價">$${item.price}</td>
+            <td data-label="數量">${item.qty}</td>
+            <td data-label="小計" style="color:#b85c38; font-weight:bold;">$${subtotal}</td>
+          </tr>
+        `;
+            });
+
+            orderTotal.innerText = sum;
+        }
+
+        function goBack() {
+            window.location.href = "shopJson.html";
+        }
+
+        function confirmOrder() {
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+            if (cart.length === 0) {
+                alert("訂單內沒有商品無法送出喔！");
+                return;
+            }
+
+            // 在此處可加入將訂單資料傳送至後端伺服器的邏輯
+            alert("訂單已成功送出！感謝您的購買。");
+
+            // 清空購物車資料並返回首頁
+            localStorage.removeItem("cart");
+            window.location.href = "shopJson.html";
+        }
+
+        // 載入時渲染訂單
+        renderOrder();
+    </script>
+</body>
+
+</html>
