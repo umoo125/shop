@@ -600,6 +600,66 @@
     "image": "311.jpg"
   },
   {
+    "id": 331,
+    "name": "S掛鈎-山上動物組",
+    "price": 60,
+    "category": {
+      "key": "330",
+      "label": "吊飾"
+    },
+    "image": "331.jpg"
+  },
+  {
+    "id": 332,
+    "name": "S掛鈎-萌主三寶",
+    "price": 60,
+    "category": {
+      "key": "330",
+      "label": "吊飾"
+    },
+    "image": "332.jpg"
+  },
+  {
+    "id": 333,
+    "name": "S掛鈎-竉物組",
+    "price": 60,
+    "category": {
+      "key": "330",
+      "label": "吊飾"
+    },
+    "image": "333.jpg"
+  },
+  {
+    "id": 341,
+    "name": "平安符吊飾4入",
+    "price": 200,
+    "category": {
+      "key": "330",
+      "label": "吊飾"
+    },
+    "image": "341.jpg"
+  },
+  {
+    "id": 351,
+    "name": "畢業勳章-熊學院組",
+    "price": 200,
+    "category": {
+      "key": "330",
+      "label": "吊飾"
+    },
+    "image": "351.jpg"
+  },
+  {
+    "id": 352,
+    "name": "畢業勳章-動漫組",
+    "price": 200,
+    "category": {
+      "key": "330",
+      "label": "吊飾"
+    },
+    "image": "352.jpg"
+  },
+  {
     "id": 701,
     "name": "水煮溫泉鵝蛋",
     "price": 50,
